@@ -45,7 +45,7 @@ export default function HeroAbout({ accentColor, siteName }: HeroAboutProps) {
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
-              기업의 성장을 위한<br />
+              소상공인의 성장을 위한<br />
               최고의 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300">정책자금 파트너</span>
             </h1>
 

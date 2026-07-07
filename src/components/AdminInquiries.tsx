@@ -124,7 +124,7 @@ export default function AdminInquiries({ inquiries, onUpdateInquiries }: AdminIn
               <thead>
                 <tr className="border-b border-slate-800 bg-slate-900/80 text-slate-400 text-xs font-semibold uppercase tracking-wider">
                   <th className="py-3 px-4">고객 / 기업</th>
-                  <th className="py-3 px-4">연락처 / 이메일</th>
+                  <th className="py-3 px-4">연락처 / 업종</th>
                   <th className="py-3 px-4">접수 일시</th>
                   <th className="py-3 px-4">진행 상태</th>
                   <th className="py-3 px-4 text-right">관리</th>
@@ -224,10 +224,10 @@ export default function AdminInquiries({ inquiries, onUpdateInquiries }: AdminIn
 
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-blue-950/80 flex items-center justify-center text-blue-400">
-                  <Mail size={16} />
+                  <Building size={16} />
                 </div>
                 <div>
-                  <div className="text-xs text-slate-400">이메일 주소</div>
+                  <div className="text-xs text-slate-400">업종</div>
                   <div className="font-medium text-white">{selectedInquiry.email}</div>
                 </div>
               </div>

@@ -15,7 +15,7 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
   const [clientName, setClientName] = useState('');
   const [companyName, setCompanyName] = useState('');
   const [contactNumber, setContactNumber] = useState('');
-  const [emailAddress, setEmailAddress] = useState('');
+  const [industry, setIndustry] = useState('');
   const [consultingContent, setConsultingContent] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -29,7 +29,7 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
   // Handle Inquiry Submit
   const handleInquirySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!clientName || !companyName || !contactNumber || !emailAddress || !consultingContent) {
+    if (!clientName || !companyName || !contactNumber || !industry || !consultingContent) {
       alert('모든 필수 항목을 입력해주세요.');
       return;
     }
@@ -48,7 +48,7 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
           '이름 (Name)': clientName,
           '회사명 (Company)': companyName,
           '연락처 (Contact)': contactNumber,
-          '이메일 (Email)': emailAddress,
+          '업종 (Industry)': industry,
           '문의내용 (Content)': consultingContent
         })
       });
@@ -63,7 +63,7 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
         name: clientName,
         company: companyName,
         contact: contactNumber,
-        email: emailAddress,
+        email: industry, // Storing industry value in the email field for database compatibility
         content: consultingContent,
         memo: '',
         status: 'unprocessed',
@@ -80,7 +80,7 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
       setClientName('');
       setCompanyName('');
       setContactNumber('');
-      setEmailAddress('');
+      setIndustry('');
       setConsultingContent('');
     } catch (error) {
       console.error('Error submitting form to Formspree:', error);
@@ -189,12 +189,12 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-slate-400 mb-1.5">이메일 주소 <span className="text-red-400">*</span></label>
+                    <label className="block text-xs font-bold text-slate-400 mb-1.5">업종 <span className="text-red-400">*</span></label>
                     <input
-                      type="email"
-                      value={emailAddress}
-                      onChange={(e) => setEmailAddress(e.target.value)}
-                      placeholder="예: ceo@gctech.com"
+                      type="text"
+                      value={industry}
+                      onChange={(e) => setIndustry(e.target.value)}
+                      placeholder="예: 제조업, 정보통신업, 도소매업 등"
                       className="w-full p-2.5 bg-white/5 text-white border border-white/10 rounded-lg text-xs focus:outline-none focus:border-blue-500 disabled:opacity-50"
                       required
                       disabled={isSubmitting}
@@ -254,106 +254,84 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
             <div className="w-12 h-1 bg-blue-500 mx-auto rounded-full mt-2" />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Col: Blog Feed & Search (2/3 width) */}
-            <div className="lg:col-span-2 flex flex-col gap-6">
-              
-              {/* Blog controls */}
-              <div className="flex flex-col md:flex-row gap-3.5 justify-between">
-                {/* Search */}
-                <div className="relative flex-1 max-w-sm">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                  <input
-                    type="text"
-                    value={blogSearchTerm}
-                    onChange={(e) => setBlogSearchTerm(e.target.value)}
-                    placeholder="지식센터 정보글 검색..."
-                    className="w-full pl-9 pr-4 py-2 text-xs bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-
-                {/* Categories */}
-                <div className="flex gap-1.5 overflow-x-auto pb-1 max-w-full">
-                  {['all', '정책자금', '정부지원사업', '창업', '기업인증', '세무', '금융'].map(cat => (
-                    <button
-                      key={cat}
-                      onClick={() => setBlogCategory(cat)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 cursor-pointer transition-all ${blogCategory === cat ? 'bg-blue-600 text-white shadow' : 'bg-white/5 border border-white/10 text-white/60 hover:text-white'}`}
-                    >
-                      {cat === 'all' ? '전체 카테고리' : cat}
-                    </button>
-                  ))}
-                </div>
+          <div className="flex flex-col gap-6">
+            
+            {/* Blog controls */}
+            <div className="flex flex-col md:flex-row gap-3.5 justify-between">
+              {/* Search */}
+              <div className="relative flex-1 max-w-sm">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                <input
+                  type="text"
+                  value={blogSearchTerm}
+                  onChange={(e) => setBlogSearchTerm(e.target.value)}
+                  placeholder="지식센터 정보글 검색..."
+                  className="w-full pl-9 pr-4 py-2 text-xs bg-white/5 border border-white/10 rounded-lg text-white focus:outline-none focus:border-blue-500"
+                />
               </div>
 
-              {/* Blogs Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {filteredBlogs.length === 0 ? (
-                  <div className="col-span-full py-12 text-center text-slate-500 bg-slate-900/40 border border-slate-800/80 rounded-2xl">
-                    해당 조건과 일치하는 정책 정보글이 없습니다.
-                  </div>
-                ) : (
-                  filteredBlogs.map((blog) => (
-                    <div 
-                      key={blog.id}
-                      onClick={() => setSelectedBlog(blog)}
-                      className="glass-card rounded-2xl overflow-hidden group flex flex-col justify-between"
-                    >
-                      <div>
-                        <div className="relative aspect-video bg-slate-850 overflow-hidden border-b border-white/5">
-                          <img 
-                            src={blog.imageUrl} 
-                            alt={blog.title} 
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            referrerPolicy="no-referrer"
-                          />
-                          <span className="absolute top-3 left-3 text-[10px] font-bold bg-blue-950/85 text-blue-300 px-2 py-0.5 rounded border border-blue-900">
-                            {blog.category}
-                          </span>
-                        </div>
-
-                        <div className="p-5">
-                          <h4 className="font-extrabold text-white text-sm sm:text-base leading-snug group-hover:text-blue-400 transition-colors line-clamp-1">
-                            {blog.title}
-                          </h4>
-                          <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
-                            {blog.content}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="px-5 pb-5 pt-2 flex items-center justify-between text-[11px] text-slate-500 border-t border-white/5">
-                        <div className="flex gap-2">
-                          <span className="flex items-center gap-1"><User size={10} /> {blog.writer}</span>
-                          <span className="flex items-center gap-1"><Calendar size={10} /> {blog.date}</span>
-                        </div>
-                        <span className="text-[10px] text-blue-400 font-bold group-hover:translate-x-0.5 transition-transform">
-                          더 읽기 &rarr;
-                        </span>
-                      </div>
-                    </div>
-                  ))
-                )}
+              {/* Categories */}
+              <div className="flex gap-1.5 overflow-x-auto pb-1 max-w-full">
+                {['all', '정책자금', '정부지원사업', '창업', '기업인증', '세무', '금융'].map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setBlogCategory(cat)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold shrink-0 cursor-pointer transition-all ${blogCategory === cat ? 'bg-blue-600 text-white shadow' : 'bg-white/5 border border-white/10 text-white/60 hover:text-white'}`}
+                  >
+                    {cat === 'all' ? '전체 카테고리' : cat}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Right Col: Pinnable Notice list & quick widgets (1/3 width) */}
-            <div className="lg:col-span-1 flex flex-col gap-6">
+            {/* Blogs Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {filteredBlogs.length === 0 ? (
+                <div className="col-span-full py-12 text-center text-slate-500 bg-slate-900/40 border border-slate-800/80 rounded-2xl">
+                  해당 조건과 일치하는 정책 정보글이 없습니다.
+                </div>
+              ) : (
+                filteredBlogs.map((blog) => (
+                  <div 
+                    key={blog.id}
+                    onClick={() => setSelectedBlog(blog)}
+                    className="glass-card rounded-2xl overflow-hidden group flex flex-col justify-between"
+                  >
+                    <div>
+                      <div className="relative aspect-video bg-slate-850 overflow-hidden border-b border-white/5">
+                        <img 
+                          src={blog.imageUrl} 
+                          alt={blog.title} 
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          referrerPolicy="no-referrer"
+                        />
+                        <span className="absolute top-3 left-3 text-[10px] font-bold bg-blue-950/85 text-blue-300 px-2 py-0.5 rounded border border-blue-900">
+                          {blog.category}
+                        </span>
+                      </div>
 
-              {/* Special contact box */}
-              <div className="glass-card p-6 rounded-2xl flex flex-col gap-4 bg-gradient-to-br from-blue-950/40 to-[#071A3D]/40 border-blue-500/15">
-                <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center">
-                  <MessageSquare size={16} />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-sm">유선 유선 정밀 자가 상담처</h4>
-                  <p className="text-xs text-slate-300 mt-1">인터넷 신청이 복잡하신 대표님들께서는 당사 금융팀장과 직통 핫라인으로 빠르게 통화하실 수 있습니다.</p>
-                </div>
-                <div className="text-lg font-black text-white mt-1 flex items-center gap-1.5">
-                  <span className="text-blue-400">Tel:</span> 010-2970-2613
-                </div>
-              </div>
+                      <div className="p-5">
+                        <h4 className="font-extrabold text-white text-sm sm:text-base leading-snug group-hover:text-blue-400 transition-colors line-clamp-1">
+                          {blog.title}
+                        </h4>
+                        <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
+                          {blog.content}
+                        </p>
+                      </div>
+                    </div>
 
+                    <div className="px-5 pb-5 pt-2 flex items-center justify-between text-[11px] text-slate-500 border-t border-white/5">
+                      <div className="flex gap-2">
+                        <span className="flex items-center gap-1"><User size={10} /> {blog.writer}</span>
+                        <span className="flex items-center gap-1"><Calendar size={10} /> {blog.date}</span>
+                      </div>
+                      <span className="text-[10px] text-blue-400 font-bold group-hover:translate-x-0.5 transition-transform">
+                        더 읽기 &rarr;
+                      </span>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
