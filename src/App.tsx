@@ -162,6 +162,16 @@ export default function App() {
         siteName={db.siteSettings.siteName} 
       />
 
+      {/* 2.5 Inquiries Intake (Positioned right after the main page as requested) */}
+      <InquiryBlog 
+        blogs={db.blogs}
+        notices={db.notices}
+        inquiries={db.inquiries}
+        onUpdateDb={(updatedInqs) => handleUpdateDb({ ...db, inquiries: updatedInqs })}
+        accentColor={accentColor}
+        mode="inquiry"
+      />
+
       {/* 3. Service Offerings & Process Timeline */}
       <ServicesProcess 
         services={db.services} 
@@ -176,13 +186,14 @@ export default function App() {
         accentColor={accentColor}
       />
 
-      {/* 5. Inquiries Intake & Knowledge Center Newsroom */}
+      {/* 5. Knowledge Center Newsroom */}
       <InquiryBlog 
         blogs={db.blogs}
         notices={db.notices}
         inquiries={db.inquiries}
         onUpdateDb={(updatedInqs) => handleUpdateDb({ ...db, inquiries: updatedInqs })}
         accentColor={accentColor}
+        mode="blog"
       />
 
       {/* 6. Footer Disclaimer & Corporate Identifiers */}

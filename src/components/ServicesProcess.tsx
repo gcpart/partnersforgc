@@ -17,7 +17,7 @@ export default function ServicesProcess({ services, accentColor }: ServicesProce
     {
       num: '01',
       title: '상담 신청 접수',
-      desc: '공식 홈페이지 또는 대표번호 010-2970-2613을 통해 기업 기본 정보 및 조달 요구 사안에 대해 24시간 간편 상담을 접수합니다.'
+      desc: '공식 홈페이지 신청하기로 신청하시면 바로 상담 가능합니다. 소상공인 기본 정보 및 요구 사안에 대해 24시간 신속하게 상담을 접수합니다.'
     },
     {
       num: '02',

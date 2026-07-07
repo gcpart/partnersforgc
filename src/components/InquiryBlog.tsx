@@ -8,9 +8,10 @@ interface InquiryBlogProps {
   inquiries: Inquiry[];
   onUpdateDb: (updatedInquiries: Inquiry[]) => void;
   accentColor: string;
+  mode?: 'all' | 'inquiry' | 'blog';
 }
 
-export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, accentColor }: InquiryBlogProps) {
+export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, accentColor, mode = 'all' }: InquiryBlogProps) {
   // Inquiry Form States
   const [clientName, setClientName] = useState('');
   const [companyName, setCompanyName] = useState('');
@@ -105,7 +106,8 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
   return (
     <div className="flex flex-col">
       {/* ---------------- CONSULTATION INQUIRY FORM ---------------- */}
-      <section id="inquiry" className="py-24 bg-[#071A3D] relative overflow-hidden">
+      {(mode === 'all' || mode === 'inquiry') && (
+        <section id="inquiry" className="py-24 bg-[#071A3D] relative overflow-hidden">
         {/* Decorative circle */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-900/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -238,9 +240,11 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
           </div>
         </div>
       </section>
+      )}
 
       {/* ---------------- BLOG SECTION (정책자금 정보) ---------------- */}
-      <section id="blog" className="py-24 bg-[#051430] relative border-b border-white/5">
+      {(mode === 'all' || mode === 'blog') && (
+        <section id="blog" className="py-24 bg-[#051430] relative border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Header */}
@@ -336,9 +340,10 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
           </div>
         </div>
       </section>
+      )}
 
       {/* ---------------- BLOG READING DETAIL MODAL ---------------- */}
-      {selectedBlog && (
+      {(mode === 'all' || mode === 'blog') && selectedBlog && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in">
           <div className="glass-panel w-full max-w-2xl rounded-2xl p-6 md:p-8 flex flex-col gap-4 relative max-h-[90vh] overflow-y-auto shadow-2xl">
             <button
@@ -404,7 +409,7 @@ export default function InquiryBlog({ blogs, notices, inquiries, onUpdateDb, acc
       )}
 
       {/* ---------------- NOTICE READING DETAIL MODAL ---------------- */}
-      {selectedNotice && (
+      {(mode === 'all' || mode === 'blog') && selectedNotice && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in">
           <div className="glass-panel w-full max-w-xl rounded-2xl p-6 flex flex-col gap-4 relative max-h-[85vh] overflow-y-auto shadow-2xl">
             <button
