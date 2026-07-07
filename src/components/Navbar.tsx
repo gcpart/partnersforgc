@@ -110,25 +110,10 @@ export default function Navbar({ siteSettings, onEnterAdmin, accentColor }: Navb
               >
                 상담 신청하기
               </button>
-
-              <button
-                onClick={() => setShowLoginModal(true)}
-                className="flex items-center gap-1.5 text-xs font-medium text-white/80 border border-white/20 hover:bg-white hover:text-[#071A3D] py-2 px-4 rounded-full transition-all uppercase tracking-tighter cursor-pointer"
-              >
-                <Shield size={12} />
-                Admin Portal
-              </button>
             </div>
 
             {/* Mobile Menu Button */}
             <div className="lg:hidden flex items-center gap-3">
-              <button
-                onClick={() => setShowLoginModal(true)}
-                className="flex items-center gap-1 text-xs font-semibold text-white/80 border border-white/20 py-1.5 px-3 rounded-full cursor-pointer hover:bg-white/10"
-              >
-                <Shield size={11} />
-                Admin
-              </button>
               <button
                 onClick={() => setIsOpen(!isOpen)}
                 className="text-white/80 hover:text-white focus:outline-none cursor-pointer"
